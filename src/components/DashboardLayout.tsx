@@ -9,10 +9,13 @@ import {
   Utensils,
   BarChart3,
   MessageSquare,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import GlobalFilters from "./GlobalFilters";
 import AiInsightsPanel from "./AiInsightsPanel";
 import DashboardContent from "./DashboardContent";
+import { motion } from "framer-motion";
 
 export type DashboardTab = "sales" | "menu" | "operations" | "survey";
 
@@ -53,78 +56,106 @@ const DashboardLayout = ({ initialTab = "sales" }: DashboardLayoutProps) => {
     survey: "Guest Survey Analysis",
   };
 
+  const dashboardIcons = {
+    sales: <TrendingUp size={20} />,
+    menu: <Utensils size={20} />,
+    operations: <BarChart3 size={20} />,
+    survey: <MessageSquare size={20} />,
+  };
+
   return (
     <div className="flex h-screen bg-background">
       {/* Sidebar */}
-      <div
-        className={`${sidebarCollapsed ? "w-16" : "w-64"} bg-card border-r border-border transition-all duration-300 flex flex-col`}
+      <motion.div
+        initial={{ width: sidebarCollapsed ? 64 : 256 }}
+        animate={{ width: sidebarCollapsed ? 64 : 256 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className={`bg-card border-r border-border/30 shadow-sm flex flex-col z-10`}
       >
-        <div className="p-4 flex items-center justify-between border-b border-border">
+        <div className="p-4 flex items-center justify-between border-b border-border/30">
           {!sidebarCollapsed && (
-            <h2 className="text-xl font-bold">F&B Analytics</h2>
+            <motion.h2
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              className="text-xl font-semibold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent"
+            >
+              F&B Analytics
+            </motion.h2>
           )}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="p-2 rounded-md hover:bg-accent"
+            className="p-2 rounded-full hover:bg-accent/80 transition-colors duration-200"
+            aria-label={
+              sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"
+            }
           >
-            <Menu size={20} />
+            {sidebarCollapsed ? (
+              <ChevronRight size={18} />
+            ) : (
+              <ChevronLeft size={18} />
+            )}
           </button>
         </div>
 
-        <nav className="flex-1 p-2">
-          <ul className="space-y-2">
-            <li>
-              <button
-                onClick={() => setActiveTab("sales")}
-                className={`w-full flex items-center p-2 rounded-md ${activeTab === "sales" ? "bg-primary text-primary-foreground" : "hover:bg-accent"}`}
-              >
-                <TrendingUp size={20} />
-                {!sidebarCollapsed && (
-                  <span className="ml-3">Sales Analysis</span>
-                )}
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => setActiveTab("menu")}
-                className={`w-full flex items-center p-2 rounded-md ${activeTab === "menu" ? "bg-primary text-primary-foreground" : "hover:bg-accent"}`}
-              >
-                <Utensils size={20} />
-                {!sidebarCollapsed && (
-                  <span className="ml-3">Menu Analysis</span>
-                )}
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => setActiveTab("operations")}
-                className={`w-full flex items-center p-2 rounded-md ${activeTab === "operations" ? "bg-primary text-primary-foreground" : "hover:bg-accent"}`}
-              >
-                <BarChart3 size={20} />
-                {!sidebarCollapsed && <span className="ml-3">Operations</span>}
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => setActiveTab("survey")}
-                className={`w-full flex items-center p-2 rounded-md ${activeTab === "survey" ? "bg-primary text-primary-foreground" : "hover:bg-accent"}`}
-              >
-                <MessageSquare size={20} />
-                {!sidebarCollapsed && (
-                  <span className="ml-3">Guest Survey</span>
-                )}
-              </button>
-            </li>
+        <nav className="flex-1 py-6 px-3">
+          <ul className="space-y-4">
+            {Object.entries(dashboardTitles).map(([key, title]) => (
+              <li key={key}>
+                <button
+                  onClick={() => setActiveTab(key as DashboardTab)}
+                  className={`w-full flex items-center p-3 rounded-lg transition-all duration-200 ${
+                    activeTab === key
+                      ? "bg-primary/10 text-primary shadow-sm border-l-4 border-primary"
+                      : "hover:bg-accent/50 text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <span className="flex items-center justify-center">
+                    {dashboardIcons[key as DashboardTab]}
+                  </span>
+                  {!sidebarCollapsed && (
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.1 }}
+                      className="ml-3 font-medium"
+                    >
+                      {title}
+                    </motion.span>
+                  )}
+                </button>
+              </li>
+            ))}
           </ul>
         </nav>
-      </div>
+
+        <div className="p-4 border-t border-border/30 text-center">
+          {!sidebarCollapsed && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              className="text-xs text-muted-foreground"
+            >
+              Dashboard v1.0
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden bg-background/50">
         {/* Header with filters */}
-        <header className="bg-card border-b border-border">
-          <div className="p-4 flex items-center justify-between">
-            <h1 className="text-2xl font-bold">{dashboardTitles[activeTab]}</h1>
+        <header className="bg-card/80 border-b border-border/30 shadow-sm sticky top-0 z-10">
+          <div className="p-5 flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <span className="p-2 rounded-md bg-primary/10 text-primary">
+                {dashboardIcons[activeTab]}
+              </span>
+              <h1 className="text-2xl font-semibold tracking-tight">
+                {dashboardTitles[activeTab]}
+              </h1>
+            </div>
           </div>
           <GlobalFilters
             filters={filters}
@@ -133,16 +164,27 @@ const DashboardLayout = ({ initialTab = "sales" }: DashboardLayoutProps) => {
         </header>
 
         {/* Dashboard Content */}
-        <main className="flex-1 overflow-auto p-4">
-          <Card className="mb-4">
+        <main className="flex-1 overflow-auto p-6 bg-background/50">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="mb-6"
+          >
             <AiInsightsPanel
               dashboardType={activeTab}
               filters={filters}
               isLoading={false}
             />
-          </Card>
+          </motion.div>
 
-          <DashboardContent dashboardType={activeTab} filters={filters} />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+          >
+            <DashboardContent dashboardType={activeTab} filters={filters} />
+          </motion.div>
         </main>
       </div>
     </div>

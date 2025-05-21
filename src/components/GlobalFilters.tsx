@@ -181,7 +181,7 @@ const GlobalFilters: React.FC<GlobalFiltersProps> = ({
               <ChevronDownIcon className="h-4 w-4 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[200px] p-4">
+          <PopoverContent className="w-[200px] p-4 border-border/50 shadow-lg rounded-lg">
             <div className="space-y-2">
               {menuCategoryOptions.map((category) => (
                 <div key={category.id} className="flex items-center space-x-2">

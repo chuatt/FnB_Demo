@@ -92,11 +92,32 @@ const AiInsightsPanel = ({
   const getPriorityBadge = (priority: ActionItem["priority"]) => {
     switch (priority) {
       case "high":
-        return <Badge variant="destructive">High Priority</Badge>;
+        return (
+          <Badge
+            variant="outline"
+            className="bg-red-50 text-red-600 border-red-200 text-xs font-medium"
+          >
+            High Priority
+          </Badge>
+        );
       case "medium":
-        return <Badge variant="secondary">Medium Priority</Badge>;
+        return (
+          <Badge
+            variant="outline"
+            className="bg-amber-50 text-amber-600 border-amber-200 text-xs font-medium"
+          >
+            Medium Priority
+          </Badge>
+        );
       case "low":
-        return <Badge>Low Priority</Badge>;
+        return (
+          <Badge
+            variant="outline"
+            className="bg-green-50 text-green-600 border-green-200 text-xs font-medium"
+          >
+            Low Priority
+          </Badge>
+        );
       default:
         return null;
     }

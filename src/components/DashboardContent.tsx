@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { LineChart, BarChart, PieChart, CircleSlash } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface DashboardContentProps {
   selectedFilters?: {
@@ -303,19 +304,29 @@ const DashboardContent = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>NPS Categories</CardTitle>
-                <CardDescription>
-                  Promoters, Passives, Detractors
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="h-[300px] flex items-center justify-center bg-muted/20">
-                <div className="text-muted-foreground">
-                  Pie Chart: NPS Categories
-                </div>
-              </CardContent>
-            </Card>
+            <motion.div variants={cardVariants}>
+              <Card className="overflow-hidden border-border/40 shadow-sm hover:shadow-md transition-all duration-300 h-full">
+                <CardHeader className="bg-card/50 pb-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-lg font-semibold tracking-tight">
+                        NPS Categories
+                      </CardTitle>
+                      <CardDescription className="text-sm mt-1">
+                        Promoters, Passives, Detractors
+                      </CardDescription>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className="text-xs bg-primary/10 text-primary border-primary/20"
+                    >
+                      Monthly
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="h-[300px] pt-4"></CardContent>
+              </Card>
+            </motion.div>
 
             <Card>
               <CardHeader>
@@ -334,10 +345,27 @@ const DashboardContent = ({
                 <CardTitle>Sentiment Analysis</CardTitle>
                 <CardDescription>Comment sentiments</CardDescription>
               </CardHeader>
-              <CardContent className="h-[300px] flex items-center justify-center bg-muted/20">
-                <div className="text-muted-foreground">
-                  Word Cloud + Bar Chart: Sentiment Analysis
-                </div>
+              <CardContent className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={[
+                      { category: "Food Quality", positive: 85, negative: 15 },
+                      { category: "Service", positive: 75, negative: 25 },
+                      { category: "Ambiance", positive: 90, negative: 10 },
+                      { category: "Value", positive: 65, negative: 35 },
+                      { category: "Cleanliness", positive: 95, negative: 5 },
+                    ]}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="category" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="positive" stackId="a" fill="#82ca9d" />
+                    <Bar dataKey="negative" stackId="a" fill="#ff8042" />
+                  </BarChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
 
