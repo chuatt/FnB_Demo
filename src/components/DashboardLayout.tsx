@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import {
   Menu,
   LayoutDashboard,
@@ -11,6 +12,7 @@ import {
   MessageSquare,
   ChevronLeft,
   ChevronRight,
+  LogOut,
 } from "lucide-react";
 import GlobalFilters from "./GlobalFilters";
 import AiInsightsPanel from "./AiInsightsPanel";
@@ -130,15 +132,35 @@ const DashboardLayout = ({ initialTab = "sales" }: DashboardLayoutProps) => {
         </nav>
 
         <div className="p-4 border-t border-border/30 text-center">
-          {!sidebarCollapsed && (
+          {!sidebarCollapsed ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.1 }}
-              className="text-xs text-muted-foreground"
+              className="flex flex-col gap-2"
             >
-              Dashboard v1.0
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+                onClick={() => (window.location.href = "/login")}
+              >
+                <LogOut size={16} />
+                <span>Sign Out</span>
+              </Button>
+              <div className="text-xs text-muted-foreground">
+                Dashboard v1.0
+              </div>
             </motion.div>
+          ) : (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="w-full"
+              onClick={() => (window.location.href = "/login")}
+            >
+              <LogOut size={16} />
+            </Button>
           )}
         </div>
       </motion.div>

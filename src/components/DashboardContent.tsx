@@ -7,7 +7,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { LineChart, BarChart, PieChart, CircleSlash } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
 
 interface DashboardContentProps {
   selectedFilters?: {
@@ -346,26 +352,9 @@ const DashboardContent = ({
                 <CardDescription>Comment sentiments</CardDescription>
               </CardHeader>
               <CardContent className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={[
-                      { category: "Food Quality", positive: 85, negative: 15 },
-                      { category: "Service", positive: 75, negative: 25 },
-                      { category: "Ambiance", positive: 90, negative: 10 },
-                      { category: "Value", positive: 65, negative: 35 },
-                      { category: "Cleanliness", positive: 95, negative: 5 },
-                    ]}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="category" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="positive" stackId="a" fill="#82ca9d" />
-                    <Bar dataKey="negative" stackId="a" fill="#ff8042" />
-                  </BarChart>
-                </ResponsiveContainer>
+                <div className="text-muted-foreground">
+                  Bar Chart: Sentiment Analysis
+                </div>
               </CardContent>
             </Card>
 

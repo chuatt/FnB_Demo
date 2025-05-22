@@ -116,8 +116,17 @@ const Home = () => {
 
           {insightsVisible && (
             <AiInsightsPanel
-              data={getInsightsData()}
-              onToggle={toggleInsights}
+              dashboardType={selectedTab}
+              insights={getInsightsData().insights.map((insight, index) => ({
+                id: String(index),
+                text: insight.text,
+                type: insight.trend as "positive" | "negative" | "neutral",
+              }))}
+              actionItems={getInsightsData().insights.map((insight, index) => ({
+                id: String(index),
+                text: insight.text,
+                priority: insight.trend === "positive" ? "medium" : "high",
+              }))}
             />
           )}
 
